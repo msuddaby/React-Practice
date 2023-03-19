@@ -1,35 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useReducer } from "react";
+import { Header } from "./Header";
+import { MainApp } from "./MainApp";
+import { authenticate, User } from "./api/authenticate";
+import { authorize } from "./api/authorize";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+type State = {
+  user: undefined | User;
+  permissions: undefined | string[];
+  loading: boolean;
+};
+const initialState: State = {
+  user: undefined,
+  permissions: undefined,
+  loading: false,
+};
+type Action =
+  | {
+      type: "authenticate";
+    }
+  | {
+      type: "authenticated";
+      user: User | undefined;
+    }
+  | {
+      type: "authorize";
+    }
+  | {
+      type: "authorized";
+      permissions: string[];
+    };
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "authenticate":
+      return { ...state, loading: true };
+    case "authenticated":
+      return { ...state, loading: false, user: action.user };
+    case "authorize":
+      return { ...state, loading: true };
+    case "authorized":
+      return { ...state, loading: false, permissions: action.permissions };
+    default:
+      return state;
+  }
 }
 
-export default App
+function App() {
+  const [{ user, permissions, loading }, dispactch] = useReducer(
+    reducer,
+    initialState
+  );
+
+  async function handleSignInClick() {
+    dispactch({ type: "authenticate" });
+    const authenticatedUser = await authenticate();
+    dispactch({
+      type: "authenticated",
+      user: authenticatedUser,
+    });
+    if (authenticatedUser !== undefined) {
+      dispactch({ type: "authorize" });
+      const authorizedPermissions = await authorize(authenticatedUser.id);
+      dispactch({
+        type: "authorized",
+        permissions: authorizedPermissions,
+      });
+    }
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4">
+      <Header user={user} onSignInClick={handleSignInClick} loading={loading} />
+      <MainApp user={user} permissions={permissions} />
+    </div>
+  );
+}
+
+export default App;
