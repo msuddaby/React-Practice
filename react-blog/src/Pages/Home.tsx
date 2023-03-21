@@ -5,6 +5,7 @@ import { NewPostForm } from "../components/NewPostForm";
 import { PostsList } from "../components/PostsList";
 import { savePost } from "../db/savePost";
 import { DbResponse, PostData } from "../db/types";
+import { DbErrorPage } from "./DbErrorPage";
 
 type Data = {
   posts: DbResponse<PostData[]>;
@@ -41,7 +42,7 @@ export function HomePage() {
         Add Post
       </button>
       <div
-        className={`flex justify-center ${showAddPost ? "hidden" : "block"}`}
+        className={`flex justify-center ${showAddPost ? "block" : "hidden"}`}
       >
         <div className="shrink w-1/2 border border-slate-400 rounded m-5 p-4">
           <NewPostForm onSave={mutate} />
@@ -56,7 +57,7 @@ export function HomePage() {
             if (posts.success) {
               return <PostsList response={posts.data!} />;
             } else {
-              <h1>An error occured!</h1>;
+              return <DbErrorPage error={posts.error!}></DbErrorPage>;
             }
           }}
         </Await>

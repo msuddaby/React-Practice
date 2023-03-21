@@ -1,8 +1,7 @@
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { Await, useLoaderData, useParams } from "react-router-dom";
-import { getPostById } from "../db/getPosts";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { DbResponse, PostData } from "../db/types";
+import { DbErrorPage } from "./DbErrorPage";
 
 type Response = {
   data: DbResponse<PostData>;
@@ -10,6 +9,7 @@ type Response = {
 
 export function ViewPost() {
   const { data } = useLoaderData() as Response;
+  const history = useNavigate();
   return (
     <>
       <Suspense
@@ -23,16 +23,31 @@ export function ViewPost() {
           {(post: DbResponse<PostData>) => {
             if (post.success) {
               const p = post.data!;
+              const created = new Date(p.created);
               return (
                 <>
-                  <h3 className="text-3xl">{p.title}</h3>
-                  <p>{p.body}</p>
+                  <div className="max-w-screen-xl mx-auto my-16">
+                    <div className="flex justify-center align-middle">
+                      <div className="flex-grow border p-6 rounded border-slate-200">
+                        <div className="border-b-2 py-3">
+                          <a href="#" onClick={() => history(-1)}>
+                            &lt; Back
+                          </a>
+                          <h3 className="text-3xl pb-2">{p.title}</h3>
+                          <p className="text-sm">
+                            {created.toLocaleDateString()}
+                          </p>
+                        </div>
+                        <p className="mt-4 whitespace-pre-line">{p.body}</p>
+                      </div>
+                    </div>
+                  </div>
                 </>
               );
             }
             return (
               <>
-                <h3>Error</h3>
+                return <DbErrorPage error={post.error!}></DbErrorPage>
               </>
             );
           }}

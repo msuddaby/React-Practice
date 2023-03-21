@@ -3,7 +3,8 @@ import { ClientResponseError } from "pocketbase"
 export type PostData = {
     id: string,
     title: string,
-    body: string
+    body: string,
+    created: string,
 }
 
 export type NewPostData = {

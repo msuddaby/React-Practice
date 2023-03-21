@@ -1,12 +1,18 @@
 import { FieldError, useForm } from "react-hook-form";
-import { NewPostData } from "../db/types";
+import { NewPostData, PostData } from "../db/types";
 import { ValidationError } from "./ValidationError";
 
 type Props = {
   onSave: (newPost: NewPostData) => void;
+  editValues?: PostData;
 };
 
 export function NewPostForm({ onSave }: Props) {
+  const sampleForm = {
+    title: "This is a sample title.",
+    body: "This is a sample body.",
+  };
+
   const {
     register,
     handleSubmit,

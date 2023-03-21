@@ -12,7 +12,7 @@ export async function getPosts(): Promise<DbResponse<PostData[]>> {
         return { data: response, success: true };
     }
     catch (err: any) {
-        if (typeof(err) === typeof(ClientResponseError)) {
+        if (err  instanceof ClientResponseError) {
             return { error: err, success: false}
         }
         else {
