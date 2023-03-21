@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { createBrowserRouter, RouterProvider, defer } from "react-router-dom";
 import App from "./App";
 import { getPostById, getPosts } from "./db/getPosts";
+import { EditPost } from "./Pages/EditPost";
 import { HomePage } from "./Pages/Home";
 import { ViewPost } from "./Pages/ViewPost";
 
@@ -37,6 +38,32 @@ const router = createBrowserRouter([
             "blogPost",
             params.id,
           ]);
+          if (existingData) {
+            return defer({ data: existingData });
+          } else {
+            return defer({
+              data: queryClient.fetchQuery(
+                ["blogPost", params.id],
+                async () => {
+                  return getPostById(params.id!);
+                }
+              ),
+            });
+          }
+        },
+      },
+      {
+        path: "edit/:id",
+        element: <EditPost />,
+        loader: async ({ params }) => {
+          if (params.id === undefined) {
+            return;
+          }
+          const existingData = queryClient.getQueryData([
+            "blogPost",
+            params.id,
+          ]);
+          console.log(existingData);
           if (existingData) {
             return defer({ data: existingData });
           } else {

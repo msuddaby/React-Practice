@@ -3,21 +3,24 @@ import { NewPostData, PostData } from "../db/types";
 import { ValidationError } from "./ValidationError";
 
 type Props = {
-  onSave: (newPost: NewPostData) => void;
+  onSave: (newPost: PostData) => void;
   editValues?: PostData;
 };
 
-export function NewPostForm({ onSave }: Props) {
-  const sampleForm = {
-    title: "This is a sample title.",
-    body: "This is a sample body.",
-  };
+export function NewPostForm({ onSave, editValues }: Props) {
+  let formData = new Object() as PostData;
+
+  if (editValues) {
+    formData = editValues;
+  }
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-  } = useForm<NewPostData>();
+  } = useForm<PostData>({
+    defaultValues: formData,
+  });
 
   const fieldStyle = "flex flex-col mb-2";
   const labelStyle = "mb-2";

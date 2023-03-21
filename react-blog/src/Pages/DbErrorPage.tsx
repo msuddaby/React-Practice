@@ -6,6 +6,9 @@ type Props = {
 };
 
 export function DbErrorPage({ error }: Props) {
+  if (error === undefined) {
+    return <h2>How??</h2>;
+  }
   const errorType = error.status;
 
   switch (errorType) {

@@ -1,3 +1,4 @@
+import { ClientResponseError } from 'pocketbase';
 import { NewPostData, PostData } from "./types";
 import PocketBase from 'pocketbase';
 
@@ -11,6 +12,14 @@ export async function savePost(newPostData: NewPostData) {
     catch (error) {
         console.log('oopsies!');
     }
-    
+}
 
+export async function updatePost(postData: PostData) {
+    try {
+        const response = pb.collection('posts').update<PostData>(postData.id, postData);
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+    }
 }

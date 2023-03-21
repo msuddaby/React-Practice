@@ -28,9 +28,13 @@ export function ViewPost() {
                 <>
                   <div className="max-w-screen-xl mx-auto my-16">
                     <div className="flex justify-center align-middle">
-                      <div className="flex-grow border p-6 rounded border-slate-200">
-                        <div className="border-b-2 py-3">
-                          <a href="#" onClick={() => history(-1)}>
+                      <div className="flex-grow border px-6 pt-4 pb-6 rounded border-slate-200">
+                        <div className="border-b-2">
+                          <a
+                            href="#"
+                            className="text-sky-800"
+                            onClick={() => history(-1)}
+                          >
                             &lt; Back
                           </a>
                           <h3 className="text-3xl pb-2">{p.title}</h3>
@@ -39,6 +43,13 @@ export function ViewPost() {
                           </p>
                         </div>
                         <p className="mt-4 whitespace-pre-line">{p.body}</p>
+                        <a
+                          href="#"
+                          className="text-sky-800"
+                          onClick={() => history(`/edit/${p.id}/`)}
+                        >
+                          Edit
+                        </a>
                       </div>
                     </div>
                   </div>
