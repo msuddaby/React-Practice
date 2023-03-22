@@ -17,3 +17,10 @@ export type DbResponse<T> = {
     data?: T,
     error?: ClientResponseError,
 }
+
+export type User = {
+    username: string,
+    email?: string,
+    password?: string,
+    role: string
+}

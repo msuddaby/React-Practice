@@ -5,7 +5,7 @@ const pb = new PocketBase('http://127.0.0.1:8090');
 
 export async function getPosts(): Promise<DbResponse<PostData[]>> {
     try {
-        await fakeNetwork();
+        //await fakeNetwork();
         const response = await pb.collection('posts').getFullList<PostData>({
             sort: '-created'
         });
@@ -25,7 +25,7 @@ export async function getPosts(): Promise<DbResponse<PostData[]>> {
 
 export async function getPostById(id: string): Promise<DbResponse<PostData>> {
     try {
-        await fakeNetwork();
+        //await fakeNetwork();
         const response = await pb.collection('posts').getOne<PostData>(id);
         return { data: response, success: true };
     }

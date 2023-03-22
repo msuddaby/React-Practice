@@ -1,23 +1,14 @@
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { NewPostForm } from "../components/NewPostForm";
-import { ValidationError } from "../components/ValidationError";
-import { savePost, updatePost } from "../db/savePost";
+import { updatePost } from "../db/savePost";
 import { DbResponse, PostData } from "../db/types";
 import { DbErrorPage } from "./DbErrorPage";
 
 type Response = {
   data: DbResponse<PostData>;
 };
-
-function onSave() {
-  return;
-}
 
 export function EditPost() {
   const data = useLoaderData() as Response;
