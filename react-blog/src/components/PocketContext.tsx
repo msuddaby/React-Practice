@@ -44,7 +44,7 @@ type Props = {
   children: ReactNode;
 };
 
-type PbUser = Record<string, User> | Admin | null;
+export type PbUser = Record<string, User> | Admin | null;
 
 const BASE_URL = "http://127.0.0.1:8090";
 const PocketContext = createContext<PocketContextProps>({

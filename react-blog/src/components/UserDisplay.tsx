@@ -9,8 +9,6 @@ export function UserDisplay() {
   const navigate = useNavigate();
 
   const containerStyle = "p-2 flex justify-between";
-  console.log(JSON.stringify(user));
-  console.log(isUser);
   if (isUser) {
     return (
       <>

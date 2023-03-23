@@ -1,6 +1,7 @@
 import { TextField, Typography } from "@mui/material";
 import { FieldError, useForm } from "react-hook-form";
 import { NewPostData, PostData } from "../db/types";
+import { usePocket } from "./PocketContext";
 import { ValidationError } from "./ValidationError";
 
 type Props = {
@@ -10,9 +11,13 @@ type Props = {
 
 export function NewPostForm({ onSave, editValues }: Props) {
   let formData = new Object() as PostData;
+  const { user } = usePocket();
 
   if (editValues) {
     formData = editValues;
+  }
+  if (user) {
+    formData.author = user.id as string;
   }
 
   const {

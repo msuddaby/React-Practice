@@ -1,15 +1,19 @@
 import { ClientResponseError } from "pocketbase"
+import { PbUser } from "../components/PocketContext"
 
 export type PostData = {
     id: string,
     title: string,
     body: string,
     created: string,
+    author?: string,
+    expand: { author: PbUser },
 }
 
 export type NewPostData = {
     title: string,
-    body: string
+    body: string,
+    author?: string,
 }
 
 export type DbResponse<T> = {

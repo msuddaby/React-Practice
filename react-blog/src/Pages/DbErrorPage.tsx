@@ -25,6 +25,18 @@ export function DbErrorPage({ error }: Props) {
           </p>
         </>
       );
+    case 404:
+      return (
+        <>
+          <h2 className="text-2xl font-semibold mb-3">
+            Error: 404 - Not Found
+          </h2>
+          <p className="text-base">
+            The page you are looking for might have been removed, had its name
+            or URL changed, or is temporarily unavailable.
+          </p>
+        </>
+      );
     default:
       return (
         <>

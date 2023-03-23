@@ -2,7 +2,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Children, Suspense } from "react";
 import { createBrowserRouter, RouterProvider, defer } from "react-router-dom";
 import App from "./App";
-import { PocketProvider } from "./components/PocketContext";
 import { Protected } from "./components/Protected";
 import { RequireAdmin } from "./components/RequireAdmin";
 import { RequireAuth } from "./components/RequireAuth";
@@ -14,9 +13,9 @@ import { SignUp } from "./Pages/Register";
 import { ViewPost } from "./Pages/ViewPost";
 import { CssVarsProvider } from "@mui/joy/styles";
 import { ViewUserProfile } from "./Pages/ViewUserProfile";
+import { getUserByUsername } from "./db/getUser";
 
 const queryClient = new QueryClient();
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -101,7 +100,14 @@ const router = createBrowserRouter([
           if (params.username === undefined) {
             return;
           }
-          return defer({ username: params.username });
+          return defer({
+            user: queryClient.fetchQuery(
+              ["user", params.username],
+              async () => {
+                return getUserByUsername(params.username!);
+              }
+            ),
+          });
         },
       },
       {
@@ -128,10 +134,8 @@ const router = createBrowserRouter([
 
 export function Routes() {
   return (
-    <PocketProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </PocketProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }

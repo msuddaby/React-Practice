@@ -7,7 +7,8 @@ export async function getPosts(): Promise<DbResponse<PostData[]>> {
     try {
         //await fakeNetwork();
         const response = await pb.collection('posts').getFullList<PostData>({
-            sort: '-created'
+            sort: '-created',
+            expand: 'author'
         });
         return { data: response, success: true };
     }

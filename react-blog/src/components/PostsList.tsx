@@ -13,13 +13,14 @@ export function PostsList({ response }: Props) {
         {response.map((post) => (
           <article
             key={post.id}
-            className="flex flex-col items-start border rounded p-4 cursor-pointer hover:bg-slate-100 hover:scale-110 transition ease-in-out"
+            className="flex flex-wrap items-start border rounded p-4 cursor-pointer hover:bg-slate-100 hover:scale-110 transition ease-in-out"
             onClick={() => navigation(`view/${post.id}`, {})}
           >
-            <div className="">
-              <h3 className="text-slate-900 font-bold break-all mb-3">
+            <div className="flex flex-col flex-grow items-start pb-3 mb-3 border-b">
+              <h3 className="text-slate-900 font-bold break-all">
                 {post.title}
               </h3>
+              <p className="text-xs">{post.expand.author!.username}</p>
             </div>
 
             <p className="text-slate-800 break-all">
