@@ -12,6 +12,7 @@ import { HomePage } from "./Pages/Home";
 import { Login } from "./Pages/Login";
 import { SignUp } from "./Pages/Register";
 import { ViewPost } from "./Pages/ViewPost";
+import { CssVarsProvider } from "@mui/joy/styles";
 
 const queryClient = new QueryClient();
 

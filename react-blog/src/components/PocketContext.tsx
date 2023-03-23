@@ -7,7 +7,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import PocketBase, { Admin, RecordAuthResponse } from "pocketbase";
+import PocketBase, {
+  Admin,
+  ClientResponseError,
+  RecordAuthResponse,
+} from "pocketbase";
 import jwtDecode from "jwt-decode";
 import { useInterval } from "usehooks-ts";
 import { User } from "../db/types";
@@ -22,11 +26,13 @@ interface PocketContextProps {
     email: string,
     password: string,
     username: string
-  ) => Promise<User | undefined> | Promise<undefined>;
+  ) => Promise<User | ClientResponseError | undefined> | Promise<undefined>;
   login: (
     email: string,
     password: string
-  ) => Promise<RecordAuthResponse<User>> | Promise<undefined>;
+  ) =>
+    | Promise<RecordAuthResponse<User> | ClientResponseError>
+    | Promise<undefined>;
   logout: () => void;
   user: PbUser | null;
   token: string;
@@ -68,18 +74,17 @@ export const PocketProvider = ({ children }: Props) => {
   const register = useCallback(
     async (email: string, password: string, username: string) => {
       try {
-        var result = await pb
-          .collection("users")
-          .create<User>({
-            username,
-            email,
-            password,
-            passwordConfirm: password,
-          });
-        console.log(result);
+        const result = await pb.collection("users").create<User>({
+          username,
+          email,
+          password,
+          passwordConfirm: password,
+        });
         return result;
       } catch (error) {
-        console.log(error);
+        if (error instanceof ClientResponseError) {
+          return error;
+        }
       }
       return undefined;
     },
@@ -88,9 +93,16 @@ export const PocketProvider = ({ children }: Props) => {
 
   const login = useCallback(
     async (email: string, password: string) => {
-      return await pb
-        .collection("users")
-        .authWithPassword<User>(email, password);
+      try {
+        return await pb
+          .collection("users")
+          .authWithPassword<User>(email, password);
+      } catch (error: any) {
+        if (error instanceof ClientResponseError) {
+          return error;
+        }
+        throw new Error("something happened");
+      }
     },
     [pb]
   );

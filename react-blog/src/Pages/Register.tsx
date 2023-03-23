@@ -1,7 +1,10 @@
 import TextField from "@mui/material/TextField";
-import { FormEvent, useCallback, useRef } from "react";
+import { ClientResponseError, ListResult } from "pocketbase";
+import { FormEvent, useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BlogAlert, BlogAlertType } from "../components/BlogAlert";
 import { usePocket } from "../components/PocketContext";
+import { User } from "../db/types";
 
 export const SignUp = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -9,21 +12,37 @@ export const SignUp = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
   const { register } = usePocket();
   const navigate = useNavigate();
+  const [alert, setAlert] = useState<BlogAlertType>({
+    open: false,
+    type: "error",
+    text: "error",
+  });
 
   const inputClass = "mb-3";
 
   const handleSubmit = useCallback(
     async (evt: FormEvent) => {
       evt?.preventDefault();
+      setAlert({ open: false });
       if (emailRef.current && passwordRef.current && usernameRef.current) {
-        console.log(emailRef.current.value);
-        console.log(usernameRef.current.value);
-        await register(
+        const result = await register(
           emailRef.current.value,
           passwordRef.current.value,
           usernameRef.current.value
         );
-        navigate("/sign-in");
+        if (result instanceof ClientResponseError) {
+          setAlert({
+            open: true,
+            type: "error",
+            text: `An error occured while registering. ${result.message}`,
+          });
+        } else if (result !== undefined) {
+          setAlert({
+            open: true,
+            type: "success",
+            text: `Registration success! Welcome ${result.username}`,
+          });
+        }
       }
     },
     [register]
@@ -31,6 +50,7 @@ export const SignUp = () => {
   return (
     <section className="flex flex-col">
       <h2>Sign Up</h2>
+      <BlogAlert open={alert.open} text={alert.text} type={alert.type} />
       <form onSubmit={handleSubmit}>
         <div className={inputClass}>
           <TextField
