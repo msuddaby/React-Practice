@@ -13,6 +13,7 @@ import { Login } from "./Pages/Login";
 import { SignUp } from "./Pages/Register";
 import { ViewPost } from "./Pages/ViewPost";
 import { CssVarsProvider } from "@mui/joy/styles";
+import { ViewUserProfile } from "./Pages/ViewUserProfile";
 
 const queryClient = new QueryClient();
 
@@ -92,6 +93,16 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "profile/:username",
+        element: <ViewUserProfile />,
+        loader: async ({ params }) => {
+          if (params.username === undefined) {
+            return;
+          }
+          return defer({ username: params.username });
+        },
       },
       {
         element: <RequireAuth />,

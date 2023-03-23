@@ -1,14 +1,17 @@
-import { usePocket } from "./components/PocketContext";
-import { assertIsUser, User } from "./db/types";
+import { useNavigate } from "react-router";
+import { UserDisplay } from "./components/UserDisplay";
 
 export function Header() {
-  const { user } = usePocket();
-  const isUser = assertIsUser(user);
+  const navigate = useNavigate();
 
   return (
     <header className="text-center text-slate-50 bg-slate-900 h-40 p-5">
-      <h1 className="text-2xl">Blog</h1>
-      <p>{isUser ? <>Hello, {`${user.username}`}</> : <>Log In</>}</p>
+      <h1 onClick={() => navigate("/")} className="text-2xl cursor-pointer">
+        Blog
+      </h1>
+      <div className="max-w-xs m-auto">
+        <UserDisplay />
+      </div>
     </header>
   );
 }

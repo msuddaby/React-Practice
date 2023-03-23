@@ -1,3 +1,5 @@
+import { LockOpen } from "@mui/icons-material";
+import { Box, Button, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { ClientResponseError, ListResult } from "pocketbase";
 import { FormEvent, useCallback, useRef, useState } from "react";
@@ -10,6 +12,7 @@ export const SignUp = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const { register } = usePocket();
   const navigate = useNavigate();
   const [alert, setAlert] = useState<BlogAlertType>({
@@ -24,11 +27,17 @@ export const SignUp = () => {
     async (evt: FormEvent) => {
       evt?.preventDefault();
       setAlert({ open: false });
-      if (emailRef.current && passwordRef.current && usernameRef.current) {
+      if (
+        emailRef.current &&
+        passwordRef.current &&
+        usernameRef.current &&
+        confirmPasswordRef.current
+      ) {
         const result = await register(
           emailRef.current.value,
           passwordRef.current.value,
-          usernameRef.current.value
+          usernameRef.current.value,
+          confirmPasswordRef.current.value
         );
         if (result instanceof ClientResponseError) {
           setAlert({
@@ -48,37 +57,83 @@ export const SignUp = () => {
     [register]
   );
   return (
-    <section className="flex flex-col">
-      <h2>Sign Up</h2>
-      <BlogAlert open={alert.open} text={alert.text} type={alert.type} />
-      <form onSubmit={handleSubmit}>
-        <div className={inputClass}>
-          <TextField
-            id="outlined-username"
-            label="Username"
-            variant="outlined"
-            ref={usernameRef}
-          />
-        </div>
-        <div className={inputClass}>
-          <TextField
-            id="outlined-email"
-            label="Email"
-            variant="outlined"
-            ref={emailRef}
-          />
-        </div>
-        <div className={inputClass}>
-          <TextField
-            id="outlined-password"
-            label="Password"
-            type="password"
-            variant="outlined"
-            ref={passwordRef}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+    <section className="flex justify-center align-middle m-4">
+      <div className="flex flex-col max-w-md flex-grow px-4 border rounded border-slate-300">
+        <BlogAlert open={alert.open} type={alert.type} text={alert.text} />
+        <Typography
+          variant="h4"
+          component="h2"
+          className="py-3 px-1 text-slate-800"
+        >
+          Register
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
+          <div className={inputClass}>
+            <TextField
+              id="outlined-username"
+              fullWidth
+              label="Username"
+              type="text"
+              variant="outlined"
+              inputRef={usernameRef}
+            />
+          </div>
+          <div className={inputClass}>
+            <TextField
+              id="outlined-email"
+              fullWidth
+              type="email"
+              label="Email"
+              variant="outlined"
+              inputRef={emailRef}
+            />
+          </div>
+          <div className={inputClass}>
+            <TextField
+              id="outlined-password"
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              inputRef={passwordRef}
+            />
+          </div>
+          <div className={inputClass}>
+            <TextField
+              id="outlined-password"
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              inputRef={confirmPasswordRef}
+            />
+          </div>
+          <Box className="p-2 flex justify-around">
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mb: 1 }}
+              type="submit"
+              endIcon={<LockOpen />}
+            >
+              Register
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{ mb: 1 }}
+              type="button"
+              onClick={() => {
+                navigate("/login");
+              }}
+              endIcon={<LockOpen />}
+            >
+              Already registered?
+            </Button>
+          </Box>
+        </form>
+      </div>
     </section>
   );
 };

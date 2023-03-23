@@ -1,3 +1,4 @@
+import { TextField, Typography } from "@mui/material";
 import { FieldError, useForm } from "react-hook-form";
 import { NewPostData, PostData } from "../db/types";
 import { ValidationError } from "./ValidationError";
@@ -30,6 +31,9 @@ export function NewPostForm({ onSave, editValues }: Props) {
 
   return (
     <form noValidate className="" onSubmit={handleSubmit(onSave)}>
+      <Typography component="h2" variant="h5" gutterBottom>
+        New Post
+      </Typography>
       <div className={fieldStyle}>
         {isSubmitSuccessful && (
           <div
@@ -39,13 +43,13 @@ export function NewPostForm({ onSave, editValues }: Props) {
             <p>The post was successfully saved.</p>
           </div>
         )}
-        <label htmlFor="title" className={labelStyle}>
-          Title
-        </label>
-        <input
+        <TextField
           type="text"
           id="title"
-          className={getEditorStyle(errors.title)}
+          variant="outlined"
+          label="Title"
+          error={!!errors.title}
+          helperText={errors.title ? errors.title.message : ""}
           {...register("title", {
             required: "you must enter a title.",
             minLength: {
@@ -54,20 +58,20 @@ export function NewPostForm({ onSave, editValues }: Props) {
             },
           })}
         />
-        <ValidationError fieldError={errors.title} />
       </div>
       <div className={fieldStyle}>
-        <label htmlFor="body" className={labelStyle}>
-          Body
-        </label>
-        <textarea
+        <TextField
           id="body"
-          className={getEditorStyle(errors.body)}
+          variant="outlined"
+          label="Body"
+          multiline
+          rows={4}
+          error={!!errors.body}
+          helperText={errors.body ? errors.body.message : ""}
           {...register("body", {
             required: "You must enter a body",
           })}
-        ></textarea>
-        <ValidationError fieldError={errors.body} />
+        ></TextField>
       </div>
       <div className={fieldStyle}>
         <button

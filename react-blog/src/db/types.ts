@@ -26,5 +26,5 @@ export type User = {
 }
 
 export function assertIsUser(userData: any): userData is User {
-    return typeof(userData) === 'object' && userData !== null && ('role' in userData);
+    return typeof(userData) === 'object' && userData !== null && ('username' in userData);
 }

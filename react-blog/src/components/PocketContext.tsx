@@ -25,7 +25,8 @@ interface PocketContextProps {
   register: (
     email: string,
     password: string,
-    username: string
+    username: string,
+    confirmPassword: string
   ) => Promise<User | ClientResponseError | undefined> | Promise<undefined>;
   login: (
     email: string,
@@ -72,13 +73,18 @@ export const PocketProvider = ({ children }: Props) => {
   }, [pb.authStore]);
 
   const register = useCallback(
-    async (email: string, password: string, username: string) => {
+    async (
+      email: string,
+      password: string,
+      username: string,
+      confirmPassword: string
+    ) => {
       try {
         const result = await pb.collection("users").create<User>({
           username,
           email,
           password,
-          passwordConfirm: password,
+          passwordConfirm: confirmPassword,
         });
         return result;
       } catch (error) {

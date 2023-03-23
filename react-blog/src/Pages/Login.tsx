@@ -97,7 +97,9 @@ export function Login() {
                 color="primary"
                 sx={{ mb: 1 }}
                 type="button"
-                href="/register"
+                onClick={() => {
+                  navigate("/register");
+                }}
                 endIcon={<LockOpen />}
               >
                 Not registered?
