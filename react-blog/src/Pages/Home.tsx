@@ -1,3 +1,4 @@
+import { Collapse } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
 import { Await, useLoaderData } from "react-router-dom";
@@ -41,13 +42,13 @@ export function HomePage() {
       >
         Add Post
       </button>
-      <div
-        className={`flex justify-center ${showAddPost ? "block" : "hidden"}`}
-      >
-        <div className="shrink w-1/2 border border-slate-400 rounded m-5 p-4">
-          <NewPostForm onSave={mutate} />
+      <Collapse in={showAddPost}>
+        <div className={`flex justify-center`}>
+          <div className="shrink w-1/2 border border-slate-400 rounded m-5 p-4">
+            <NewPostForm onSave={mutate} />
+          </div>
         </div>
-      </div>
+      </Collapse>
       <div className="">
         <h2 className="text-3xl mb-6 font-semibold">Posts</h2>
       </div>

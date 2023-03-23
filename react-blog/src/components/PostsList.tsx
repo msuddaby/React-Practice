@@ -9,7 +9,7 @@ export function PostsList({ response }: Props) {
   const navigation = useNavigate();
   return (
     <div className="flex align-middle justify-center">
-      <div className="grid-cols-3 grid gap-4 mx-auto max-w-screen-xl lg:mx-0">
+      <div className="sm:grid-cols-1 md:grid-cols-3 grid gap-4 mx-auto max-w-screen-xl lg:mx-0">
         {response.map((post) => (
           <article
             key={post.id}
