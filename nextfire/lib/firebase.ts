@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 
-import firebase from 'firebase/compat/app'
+import firebase from 'firebase/compat/app';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
@@ -38,8 +40,10 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-// const app = initializeApp(firebaseConfig);
+//const app = initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
+export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+
 export const firestore = firebase.firestore();
 export const storage = firebase.storage();

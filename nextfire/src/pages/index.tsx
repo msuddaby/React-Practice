@@ -19,7 +19,7 @@ export default function Home() {
       <main className={styles.main}>
         <h2>erm</h2>
         <button onClick={() => toast.error("of ")}>Hello?</button>
-        <Loader show />
+        <Loader show={false} />
       </main>
     </>
   );
